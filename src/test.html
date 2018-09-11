@@ -19,6 +19,7 @@
     }
     .head_list {
       height: 200px;
+      background: #fff;
     }
 
     .head_list ul {
@@ -43,6 +44,7 @@
 
     .active {
       color: cornflowerblue;
+      background: #eee;
     }
 
     .content {
@@ -51,9 +53,26 @@
       bottom: 0;
       height: 800px;
       width: 100%;
-      background: blanchedalmond;
+      background: #eee;
       overflow-x: hidden;
       overflow-y: scroll;
+    }
+
+    .scene{
+      background: pink;
+      height: 800px;
+      float: left;
+      width: 45%;
+      margin: 2.5%;
+    }
+
+    .scene img{
+      width: 100%;
+      height: 600px;
+    }
+
+    .scene p {
+      text-align: center;
     }
 
   </style>
@@ -67,15 +86,28 @@
         <li class="oli active">人物</li>
         <li class="oli">道具</li>
         <li class="oli">贴纸</li>
-        <li class="oli">等等</li>
+        <li class="oli">场景</li>
         <li class="oicon"><img /></li>
       </ul>
     </div>
     <div class="content">
-      <div class="content_list_1" style="display:block;">1</div>
-      <div class="content_list_2" style="display:none;">2</div>
-      <div class="content_list_3" style="display:none;">3</div>
-      <div class="content_list_4" style="display:none;">4</div>
+      <div class="content_list content_list_1" style="display:block;">1</div>
+      <div class="content_list content_list_2" style="display:none;">2</div>
+      <div class="content_list content_list_3" style="display:none;">3</div>
+      <div class="content_list content_list_4" style="display:none;">
+        <!-- 场景 -->
+        <div class="scene">
+          <img src="./../assets/img/bg1.jpg" alt="">
+          <p>现代</p>
+        </div>
+        <div class="scene">
+          <img src="./../assets/img/bg2.jpg" alt="">
+          <p>怀旧</p>
+        </div>
+        <div class="scene">
+
+        </div>
+      </div>
     </div>
   </div>
   <script>
@@ -86,7 +118,7 @@
     const iconList = ['./../assets/packup.png', './../assets/pulldown.png']
     const oicon = document.querySelector('.oicon')
 
-    const odiv = ocontent.querySelectorAll('div')
+    const odiv = ocontent.querySelectorAll('.content_list')
 
     // icon 初始化
     oicon.querySelector('img').src = './../assets/packup.png'

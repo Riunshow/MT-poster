@@ -1,7 +1,7 @@
 import 'pixi.js'
 // import 'pixi-display'
 
-import 'normalize.css'
+import 'style-loader!css-loader!normalize.css'
 import './css/index.scss'
 
 import {

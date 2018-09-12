@@ -1,27 +1,31 @@
 export function background(res) {
+  console.log(res)
   //
   const bg1 = PIXI.Sprite.fromImage(res['./bg1.jpg'].url)
 
   // 初始化
-  const app = new PIXI.Application(window.innerWidth, window.innerHeight / 1.5, {backgroundColor: 0xEEEEE})
+  const app = new PIXI.Application(window.innerWidth, window.innerHeight / 1.5, {
+    backgroundColor: 0xEEEEE
+  })
 
-  // 缩放比
-  const scaleWidth = window.innerWidth / bg1.width
-  const scaleHeight = window.innerHeight / 1.5 / bg1.height
+  // 背景缩放比
+  const scaleWidth = app.view.width / bg1.width
+  const scaleHeight = app.view.height / bg1.height
 
   document.body.appendChild(app.view)
 
   bg1.scale.set(scaleWidth, scaleHeight)
-
+  bg1.anchor.set(0.5, 0);
+  bg1.position.set(app.view.width / 2, 0);
   app.stage.interactive = true
 
   // 添加背景图片
-  // app.stage.addChild(bg1)
+  app.stage.addChild(bg1)
 
 
 
   // 引入图片
-  const texture = PIXI.Texture.fromImage(require('./../../../assets/male.png'))
+  const texture = PIXI.Texture.fromImage(res['./male.png'].url)
   texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST
 
   // 创建人物图片
@@ -34,18 +38,25 @@ export function background(res) {
     // 创建人物容器
     const picContainer = new PIXI.Container()
 
-
-
-
     // 创建人物图片
     const bunny = new PIXI.Sprite(texture)
+
+    const appRatio = app.view.width / app.view.height
+    const imgRatio = bunny.width / bunny.height
+
     bunny.interactive = true
     bunny.buttonMode = true
     bunny.anchor.set(0.5)
-    bunny.scale.set(0.5 * scaleWidth, 0.5 * scaleHeight)
 
-    bunny.height = 400 * scaleWidth
-    bunny.width = 200 * scaleHeight
+    if (imgRatio >= appRatio) {
+      bunny.width = app.view.width;
+      bunny.height = app.view.width / imgRatio;
+    } else if (imgRatio < appRatio) {
+      bunny.height = app.view.height;
+      bunny.width = app.view.height * imgRatio;
+    }
+
+    bunny.scale.set(0.75)
 
     bindMoveListener(bunny, container)
 
@@ -56,20 +67,21 @@ export function background(res) {
     container.x = x
     container.y = y
 
-    // 创建外边框
-    const border = new PIXI.Graphics()
-
     const paddingWidth = 30 * scaleWidth
     const paddingHeight = 30 * scaleHeight
 
-    const borderWidth = container.width + paddingWidth * 2
-    const borderHeight = container.height + paddingHeight * 2
+    // 创建外边框
+    const border = new PIXI.Graphics();
 
-    const borderX = 0 - borderWidth / 2
-    const borderY = 0 - borderHeight / 2
-
-    border.lineStyle(2, 0x000000, 1)
-    border.drawRect(borderX, borderY, borderWidth, borderHeight)
+    border.draw = function (width, height) {
+      const lineColor = '0x000000';
+      this.lineStyle(1.5, lineColor, 1);
+      this.beginFill(0x0, 0);
+      this.drawRect(0, 0, width, height);
+      this.pivot.x = width / 2;
+      this.pivot.y = height / 2;
+      this.endFill();
+    };
 
     border.interactive = true;
     bindMoveListener(border, container)
@@ -77,11 +89,15 @@ export function background(res) {
     container.addChild(border)
     container.border = border
 
-    // 创建遮罩层
-    const handler = new PIXI.Graphics()
-    handler.beginFill(0xffFF00, 0.1)
-    handler.drawRect(borderX, borderY, borderWidth, borderHeight);
-    handler.endFill();
+    // 创建覆盖层
+    const handler = new PIXI.Graphics();
+    handler.draw = function (width, height) {
+      this.beginFill(0xffFF00, 0.1);
+      this.drawRect(0, 0, width, height);
+      this.pivot.x = width / 2;
+      this.pivot.y = height / 2;
+      this.endFill();
+    };
 
     handler.interactive = true;
     bindMoveListener(handler, container)
@@ -95,13 +111,13 @@ export function background(res) {
 
     const closeButton = new PIXI.Sprite(closeButtonTexture)
     closeButton.anchor.set(0.5);
-    closeButton.x = - container.width / 2
-    closeButton.y = - container.height / 2
+    closeButton.x = -container.width / 2
+    closeButton.y = -container.height / 2
     closeButton.width = 56;
     closeButton.height = 56;
     container.addChild(closeButton);
     container.closeButton = closeButton;
-    // bindRemoveListener(closeButton, container, focusCB);
+    bindRemoveListener(closeButton, picContainer);
 
     // resizeButton
     const resizeButtonTexture = PIXI.Texture.fromImage(require('./../../../assets/resize.png'))
@@ -118,8 +134,16 @@ export function background(res) {
 
     bindResizeListener(resizeButton, picContainer);
 
-
     app.stage.addChild(container)
+
+    // 删除
+    function bindRemoveListener(trigger, target) {
+      trigger.interactive = true;
+      const removeTarget = () => {
+        target.parent.removeChild(target);
+      };
+      trigger.on('mousedown', removeTarget).on('touchstart', removeTarget);
+    }
 
     // 绑定移动事件
     function bindMoveListener(trigger, target) {
@@ -167,6 +191,7 @@ export function background(res) {
       }
     }
 
+    // 绑定缩放事件
     function bindResizeListener(trigger, target) {
       trigger.interactive = true;
       trigger
@@ -203,8 +228,6 @@ export function background(res) {
 
           const ratio = target.width / target.height;
 
-          console.log(target.height,  newPosition.y * 2);
-
           const newHeight = (newPosition.y - paddingHeight) * 2;
           const newWidth = newHeight * ratio;
 
@@ -217,6 +240,39 @@ export function background(res) {
         }
       }
     }
+
+    // 根据容器尺寸进行调整
+    function dynamicSize() {
+      const width = picContainer.width + paddingWidth * 2;
+      const height = picContainer.height + paddingHeight * 2;
+      if (!border.width || !border.height) {
+        border.draw(width, height);
+      } else {
+        border.width = width;
+        border.height = height;
+      }
+
+      if (!handler.width || !border.height) {
+        handler.draw(width, height);
+      } else {
+        handler.width = width;
+        handler.height = height;
+      }
+
+      picContainer.hitArea = new PIXI.Rectangle(0, 0, width, height);
+      closeButton.position.set(-width / 2, -height / 2);
+      resizeButton.position.set(width / 2, height / 2);
+    }
+
+    // 循环执行,监听变化
+    dynamicSize();
+    const ticker = new PIXI.ticker.Ticker();
+    ticker.stop();
+    ticker.add(() => {
+      dynamicSize();
+    });
+    ticker.start()
+    container.ticker = ticker;
 
   }
 }

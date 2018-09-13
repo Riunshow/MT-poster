@@ -19,7 +19,7 @@ ticker.add((deltaTime) => {
   }
   processBar.style.width = realyprogress + '%'
 
-});
+})
 ticker.start()
 
 // loading data
@@ -42,6 +42,6 @@ function buttonshow() {
 }
 
 export function getSprite(name) {
-  const sprite = new PIXI.Sprite(PIXI.loader.resources[name].texture);
-  return sprite;
+  const sprite = new PIXI.Sprite(PIXI.loader.resources[name].texture)
+  return sprite
 }

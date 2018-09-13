@@ -1,15 +1,15 @@
 import 'pixi.js'
 // import 'pixi-display'
+// import 'pixi-layers'
 
 import 'style-loader!css-loader!normalize.css'
 import './css/index.scss'
 
-import {
-  pixiLoader
-} from './js/load'
-import {
-  background
-} from './js/background'
+import { pixiLoader } from './js/load'
+import { background } from './js/main'
+// import {
+//   background
+// } from './js/background'
 
 
 // tab 切换

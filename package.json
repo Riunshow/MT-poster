@@ -6,7 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "webpack-dev-server  --open --hot --config webpack.dev.js --host 127.0.0.1",
-        "build": "node_modules/.bin/webpack -p",
+        "build": "webpack --config webpack.prod.js",
         "watch": "node_modules/.bin/webpack --watch"
     },
     "repository": {
@@ -40,8 +40,10 @@
     "dependencies": {
         "@tweenjs/tween.js": "^17.2.0",
         "css-loader": "^1.0.0",
+        "html-loader": "^0.5.5",
         "normalize.css": "^8.0.0",
         "pixi-display": "^1.1.1",
+        "pixi-layers": "^0.1.9",
         "pixi.js": "^4.8.2",
         "style-loader": "^0.23.0",
         "uglifyjs-webpack-plugin": "^1.2.7",

@@ -30,7 +30,6 @@ export const pixiLoader =
     const {
       progress
     } = loader
-    // console.log(`[${progress}%]${resource.name}`)
     loadprogress = Math.round(progress)
   })
   .load()
@@ -40,4 +39,9 @@ function buttonshow() {
   document.querySelector('.xui-process').style.display = 'none'
   document.getElementById('begin_button').style.display = 'inline-block'
   console.log('load success')
+}
+
+export function getSprite(name) {
+  const sprite = new PIXI.Sprite(PIXI.loader.resources[name].texture);
+  return sprite;
 }

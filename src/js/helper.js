@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js'
 import { getSprite } from './load'
-
+console.log('test')
 const PADDING = 10
 let order = -1
 PIXI.Container.prototype.sort = function sort() {

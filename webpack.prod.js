@@ -1,7 +1,7 @@
-const merge = require('webpack-merge');
-const UglifyjsWebpackPlugin = require('uglifyjs-webpack-plugin');
-const webpack = require('webpack');
-const common = require('./webpack.common.js');
+const merge = require('webpack-merge')
+const UglifyjsWebpackPlugin = require('uglifyjs-webpack-plugin')
+const webpack = require('webpack')
+const common = require('./webpack.common.js')
 
 
 module.exports = merge(common, {
@@ -12,4 +12,4 @@ module.exports = merge(common, {
     new webpack.HashedModuleIdsPlugin(),
   ],
   mode: 'production',
-});
+})

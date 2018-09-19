@@ -6,7 +6,7 @@ const PADDING = 10;
 export function background(res) {
 
   PIXI.Container.prototype.sort = function sort() {
-    this.children.sort(function(a, b) {
+    this.children.sort(function (a, b) {
       a.zIndex = a.zIndex || 0
       b.zIndex = b.zIndex || 0
       return b.zIndex - a.zIndex
@@ -42,8 +42,7 @@ export function background(res) {
   const bg = PIXI.Sprite.fromImage(res['./bg1.jpg'].url)
 
   // 点击背景图触发隐藏事件
-  bg
-    .on('tap', bg_listener)
+  bg.on('tap', bg_listener)
 
   function bg_listener() {
     container.hideAllPanel(bg.parent)
@@ -104,7 +103,7 @@ export function background(res) {
     // border
     const border = new PIXI.Graphics()
     // create draw method first, draw it later
-    border.draw = function(width, height) {
+    border.draw = function (width, height) {
       const lineColor = '0x000000'
       this.lineStyle(1.5, lineColor, 1)
       this.beginFill(0x0, 0)
@@ -118,7 +117,7 @@ export function background(res) {
 
     // interactive handler
     const handler = new PIXI.Graphics()
-    handler.draw = function(width, height) {
+    handler.draw = function (width, height) {
       this.beginFill(0xffFF00, 0.3)
       this.drawRect(0, 0, width, height)
       this.pivot.x = width / 2

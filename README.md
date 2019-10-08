@@ -1,2 +1,3 @@
-MT Poster
-test master
+pixi.js demo
+___
+![demo](./assets/bg.jpg)
